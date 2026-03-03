@@ -19,6 +19,7 @@
           <select id="qrType">
             <option value="text" selected>Text / URL</option>
             <option value="wifi">Wi-Fi</option>
+            <option value="vcard">vCard (Contact)</option>
           </select>
         </div>
 
@@ -55,6 +56,43 @@
             <label for="wifiHidden" class="checkbox-label">
               <input type="checkbox" id="wifiHidden" /> Hidden network
             </label>
+          </div>
+        </div>
+
+        <!-- vCard -->
+        <div id="vcardFields" hidden>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vcardFirstName">First Name <span class="required">*</span></label>
+              <input type="text" id="vcardFirstName" placeholder="John" />
+            </div>
+
+            <div class="form-group">
+              <label for="vcardLastName">Last Name <span class="required">*</span></label>
+              <input type="text" id="vcardLastName" placeholder="Doe" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="vcardOrganization">Organization</label>
+            <input type="text" id="vcardOrganization" placeholder="My Company" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vcardEmail">Email</label>
+              <input type="email" id="vcardEmail" placeholder="john@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="vcardPhone">Phone</label>
+              <input type="tel" id="vcardPhone" placeholder="+1234567890" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="vcardWebsite">Website</label>
+            <input type="url" id="vcardWebsite" placeholder="https://example.com" />
           </div>
         </div>
 

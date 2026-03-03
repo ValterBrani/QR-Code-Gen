@@ -7,6 +7,13 @@ const wifiSsid = document.getElementById('wifiSsid');
 const wifiSecurity = document.getElementById('wifiSecurity');
 const wifiPassword = document.getElementById('wifiPassword');
 const wifiHidden = document.getElementById('wifiHidden');
+const vcardFields = document.getElementById('vcardFields');
+const vcardFirstName = document.getElementById('vcardFirstName');
+const vcardLastName = document.getElementById('vcardLastName');
+const vcardOrganization = document.getElementById('vcardOrganization');
+const vcardEmail = document.getElementById('vcardEmail');
+const vcardPhone = document.getElementById('vcardPhone');
+const vcardWebsite = document.getElementById('vcardWebsite');
 const qrSize = document.getElementById('qrSize');
 const qrLevel = document.getElementById('qrLevel');
 const qrFgColor = document.getElementById('qrFgColor');
@@ -39,6 +46,35 @@ function escapeWifiValue(value) {
   return value.replace(/([\\;,:\"])/g, '\\$1');
 }
 
+function buildVcardPayload() {
+  const firstName = vcardFirstName.value.trim();
+  const lastName = vcardLastName.value.trim();
+
+  if (!firstName || !lastName) {
+    alert('Please enter first and last name for the vCard.');
+    return null;
+  }
+
+  const organization = vcardOrganization.value.trim();
+  const email = vcardEmail.value.trim();
+  const phone = vcardPhone.value.trim();
+  const website = vcardWebsite.value.trim();
+
+  let vcard = 'BEGIN:VCARD\n';
+  vcard += 'VERSION:3.0\n';
+  vcard += `FN:${firstName} ${lastName}\n`;
+  vcard += `N:${lastName};${firstName};;;\n`;
+  
+  if (organization) vcard += `ORG:${organization}\n`;
+  if (email) vcard += `EMAIL:${email}\n`;
+  if (phone) vcard += `TEL:${phone}\n`;
+  if (website) vcard += `URL:${website}\n`;
+  
+  vcard += 'END:VCARD';
+
+  return vcard;
+}
+
 function getQrValue() {
   if (qrType.value === 'wifi') {
     const ssid = wifiSsid.value.trim();
@@ -58,6 +94,10 @@ function getQrValue() {
     return `WIFI:T:${security};S:${safeSsid};${passwordPart}H:${hidden};;`;
   }
 
+  if (qrType.value === 'vcard') {
+    return buildVcardPayload();
+  }
+
   const value = qrText.value.trim();
   if (!value) {
     alert('Please enter text or a URL.');
@@ -67,9 +107,10 @@ function getQrValue() {
 }
 
 function updateTypeFields() {
-  const isWifi = qrType.value === 'wifi';
-  textFields.hidden = isWifi;
-  wifiFields.hidden = !isWifi;
+  const type = qrType.value;
+  textFields.hidden = type !== 'text';
+  wifiFields.hidden = type !== 'wifi';
+  vcardFields.hidden = type !== 'vcard';
 }
 
 function generateQrCode() {
