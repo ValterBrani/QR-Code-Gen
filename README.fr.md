@@ -30,6 +30,14 @@ Le projet utilise la bibliothèque `qrcodejs` via CDN :
 
 - https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js
 
+## Agent custom
+
+Un prompt d’agent expert QR est disponible ici :
+
+- [.github/prompts/qr-expert.prompt.md](.github/prompts/qr-expert.prompt.md)
+
+Tu peux l’utiliser dans Copilot Chat pour obtenir des revues ciblées et des suggestions d’amélioration du générateur QR.
+
 ## Notes
 
 - Projet 100% front-end, sans backend.
