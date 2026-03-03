@@ -1,5 +1,12 @@
 const qrForm = document.getElementById('qrForm');
+const qrType = document.getElementById('qrType');
 const qrText = document.getElementById('qrText');
+const textFields = document.getElementById('textFields');
+const wifiFields = document.getElementById('wifiFields');
+const wifiSsid = document.getElementById('wifiSsid');
+const wifiSecurity = document.getElementById('wifiSecurity');
+const wifiPassword = document.getElementById('wifiPassword');
+const wifiHidden = document.getElementById('wifiHidden');
 const qrSize = document.getElementById('qrSize');
 const qrLevel = document.getElementById('qrLevel');
 const qrFgColor = document.getElementById('qrFgColor');
@@ -28,11 +35,46 @@ function clearQr() {
   qrContainer.innerHTML = '';
 }
 
-function generateQrCode() {
-  const value = qrText.value.trim();
+function escapeWifiValue(value) {
+  return value.replace(/([\\;,:\"])/g, '\\$1');
+}
 
+function getQrValue() {
+  if (qrType.value === 'wifi') {
+    const ssid = wifiSsid.value.trim();
+
+    if (!ssid) {
+      alert('Please enter the Wi-Fi network name (SSID).');
+      return null;
+    }
+
+    const security = wifiSecurity.value;
+    const password = wifiPassword.value.trim();
+    const hidden = wifiHidden.checked ? 'true' : 'false';
+    const safeSsid = escapeWifiValue(ssid);
+    const safePassword = escapeWifiValue(password);
+    const passwordPart = security === 'nopass' ? '' : `P:${safePassword};`;
+
+    return `WIFI:T:${security};S:${safeSsid};${passwordPart}H:${hidden};;`;
+  }
+
+  const value = qrText.value.trim();
   if (!value) {
     alert('Please enter text or a URL.');
+    return null;
+  }
+  return value;
+}
+
+function updateTypeFields() {
+  const isWifi = qrType.value === 'wifi';
+  textFields.hidden = isWifi;
+  wifiFields.hidden = !isWifi;
+}
+
+function generateQrCode() {
+  const value = getQrValue();
+  if (!value) {
     return;
   }
 
@@ -84,6 +126,14 @@ function downloadQr() {
 generateBtn.addEventListener('click', generateQrCode);
 downloadBtn.addEventListener('click', downloadQr);
 resetBtn.addEventListener('click', clearQr);
+qrType.addEventListener('change', updateTypeFields);
+
+qrForm.addEventListener('reset', () => {
+  setTimeout(() => {
+    downloadBtn.disabled = true;
+    updateTypeFields();
+  }, 0);
+});
 
 qrText.addEventListener('keydown', (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
@@ -96,3 +146,5 @@ toggleBtn.addEventListener('click', () => {
   const isHidden = optionsFieldset.classList.contains('hidden');
   toggleBtn.textContent = isHidden ? '▶ Show Options' : '▼ Hide Options';
 });
+
+updateTypeFields();

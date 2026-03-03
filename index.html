@@ -14,10 +14,48 @@
       <p>Configure your options and generate a personalized QR code.</p>
 
       <form id="qrForm">
-        <!-- Text / URL -->
         <div class="form-group">
+          <label for="qrType">QR Type</label>
+          <select id="qrType">
+            <option value="text" selected>Text / URL</option>
+            <option value="wifi">Wi-Fi</option>
+          </select>
+        </div>
+
+        <!-- Text / URL -->
+        <div class="form-group" id="textFields">
           <label for="qrText">Text / URL <span class="required">*</span></label>
           <textarea id="qrText" rows="4" placeholder="https://example.com" required></textarea>
+        </div>
+
+        <!-- Wi-Fi -->
+        <div id="wifiFields" hidden>
+          <div class="form-group">
+            <label for="wifiSsid">Network Name (SSID) <span class="required">*</span></label>
+            <input type="text" id="wifiSsid" placeholder="MyWiFi" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="wifiSecurity">Security</label>
+              <select id="wifiSecurity">
+                <option value="WPA" selected>WPA/WPA2/WPA3</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Open (No password)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="wifiPassword">Password</label>
+              <input type="text" id="wifiPassword" placeholder="********" />
+            </div>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label for="wifiHidden" class="checkbox-label">
+              <input type="checkbox" id="wifiHidden" /> Hidden network
+            </label>
+          </div>
         </div>
 
         <!-- Options -->
